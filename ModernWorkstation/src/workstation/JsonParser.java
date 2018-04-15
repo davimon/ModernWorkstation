@@ -27,18 +27,28 @@ public class JsonParser {
 
 			File notesFile = new File("src/workstation/Notes.json");
 			writer = new FileWriter(notesFile);
-			// [ starts a list in JSON/JavaScript
+			int i = 0;
 			writer.write("[\n");
-			for (Notes note: notesList) {
-
-				//  The note.toString() is written in JavaScript object notation i.e.  { "Title":"Store Data Here", \n"Category":"Store Category"}
+			for (Notes note: notesList) 
+                        {//  The note.toString() is written in JavaScript object notation i.e.  { "Title":"Store Data Here", \n"Category":"Store Category"}
 				writer.write(note.toString());
-				if (note.equals(notesList.get(notesList.size() - 1))) {
-
-				} else {
-				writer.write(",\n");
+				if (note.equals(notesList.get(notesList.size() - 1))) 
+                                {
+                                    i++;
+                                    if(i == notesList.size())
+                                    {
+                                        writer.write("\n}");
+                                        break;
+                                    }
+                                    writer.write("\n}");
+                                    
+				} 
+                                else {
+				writer.write("\n},");
 				}
-
+                                
+                                
+				
 			}
 			writer.write("\n]");
 
