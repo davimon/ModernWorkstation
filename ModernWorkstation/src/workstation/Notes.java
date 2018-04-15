@@ -72,14 +72,14 @@ public class Notes {
 public String toString() {
 
 	 if (this.category == null) {
-
-		 return "{\n\"Title\":\"" + this.title +"\",\n" + "\"Category\":\"\",\n" + "\"Content\":\"" + this.content + "\"\n}";
-
+		 
+		 return "{\n\"Title\":\"" + this.title +"\",\n" + "\"Category\":\"\",\n" + "\"Content\":\"" + this.content + "\"";  
+		 
 	 }
+	 
+	 return "{\n\"Title\":\"" + this.title +"\",\n" +  "\"Category\":\"" + this.category + "\",\n" + "\"Content\":\"" + this.content + "\"";  
 
-	 return "{\n\"Title\":\"" + this.title +"\",\n" +  "\"Category\":\"" + this.category + "\",\n" + "\"Content\":\"" + this.content + "\"\n}";
-
-
+	 
  }
 
 }
