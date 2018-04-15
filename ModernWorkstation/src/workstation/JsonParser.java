@@ -1,6 +1,6 @@
 package workstation;
 /*
- * Author: Curtis Warren
+ * Author: Curtis Warren and Anthony Davis
  * Description: This is a demo for the project SDEV Workstation (Modern Workstation)
  * to show how files should be saved in json form and how to work with the data for use in the program.
  * 
@@ -146,15 +146,13 @@ public class JsonParser {
 							note.setContent(contentString.substring("\"Content\":\"".length(), contentString.length() - 1));
 							System.out.println(contentString.substring("\"Content\":\"".length(), contentString.length() - 1));
 notesArray.add(note);
-                                                        //start my code
-                                                        //noteHold.clear();
                                                         
                                                         if(noteHold.isEmpty())
                                                         {
                                                             noteHold.add(new ArrayList<>());
                                                             
                                                         }
-                                                        
+                                                        //creates 2D ArrayList for storing notes by Title
                                                         for(int x = 0; x < notesArray.size()+1; x++)
                                                         {
                                                             if(noteHold.get(x).isEmpty())
@@ -174,36 +172,7 @@ notesArray.add(note);
                                                             }
                                                             
                                                         }
-                                                        
-                                                       /* for(List<Notes> current : noteHold)
-                                                        {
-                                                            Notes p = new Notes();
-                                                           
-                                                            if(current.isEmpty())
-                                                            {
-                                                                current.add(note);
-                                                                
-                                                            }
-                                                            else if(current.get(0).getTitle().equals(note.getTitle()))
-                                                            {
-                                                                current.add(note);
-                                                                
-                                                                
-                                                            }
-                                                            else
-                                                            {
-                                                                //noteHold.add(new ArrayList<>());
-                                                                noteHold.get(noteHold.size() - 1).add(note);
-                                                                break;
-                                                            }
-                                                            
-                                                        }*/
-                                                        
-                                                        //end of my code
-							
-						
-						}
-						
+						}						
 					}
 				}
 			}
