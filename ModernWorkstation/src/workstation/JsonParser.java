@@ -32,19 +32,18 @@ public class JsonParser {
 			for (Notes note: notesList) 
                         {//  The note.toString() is written in JavaScript object notation i.e.  { "Title":"Store Data Here", \n"Category":"Store Category"}
 				writer.write(note.toString());
+				i++;
 				if (note.equals(notesList.get(notesList.size() - 1))) 
                                 {
-                                    i++;
                                     if(i == notesList.size())
                                     {
                                         writer.write("\n}");
                                         break;
                                     }
-                                    writer.write("\n}");
+                                    writer.write("\n},\n");
                                     
-				} 
-                                else {
-				writer.write("\n},");
+				} else {
+				writer.write("\n}");
 				}
                                 
                                 
