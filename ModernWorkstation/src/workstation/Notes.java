@@ -3,9 +3,7 @@ package workstation;
  * Author: Curtis Warren,
  * Description: This is a demo for the project SDEV Workstation (Modern Workstation)
  * to show how files should be saved in json form and how to work with the data for use in the program.
- *
- *
- *
+ * Version 2.0
  */
 public class Notes {
 

@@ -3,7 +3,7 @@ package workstation;
  * Author: Curtis Warren and Anthony Davis
  * Description: This is a demo for the project SDEV Workstation (Modern Workstation)
  * to show how files should be saved in json form and how to work with the data for use in the program.
- * 
+ * Version 2.0
  */
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,10 +16,25 @@ import java.util.Scanner;
 
 public class JsonParser {
 	
-	ArrayList<Notes> notesArray = new ArrayList<Notes>();
+		ArrayList<Notes> notesArray = new ArrayList<Notes>();
         List<List<Notes>> noteHold = new ArrayList<List<Notes>>();
             
-	
+        public ArrayList<Notes> retrieveNotesArray () {
+    		
+    		File notesFile = new File("src/workstation/Notes.json");
+    		
+    		if (notesFile.exists()) {
+    			
+    			parse(notesFile);
+    			return notesArray;
+    			
+    		} else {
+    		
+    			return null;
+    		
+    		}
+    	}
+        
 	public void save (ArrayList<Notes> notesList) {
 		
 		FileWriter writer = null;
