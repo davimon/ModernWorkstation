@@ -3,9 +3,10 @@ package workstation;
 /*
  * Author: Curtis Warren
  * Description: This is a working example of the notes saving feature.
- * 
+ * Version 2.1
  */
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -31,6 +32,8 @@ public class Notes_Interface extends JFrame {
 	private JButton saveBt;
 	private JButton setCategoryBt;
 	private JButton setTitleBt;
+        private String results;
+        private String catResults;
 	
 	Notes newNote = new Notes();
 	
@@ -39,8 +42,10 @@ public class Notes_Interface extends JFrame {
 	private static Font notesFont;
 	private static File outputFile;
 	
+	private JButton browseButton;
+	
 	static {
-		
+	
 		notesArea = new JTextArea();
 		notesFont = new Font("Arial", 20, 20);
 		
@@ -49,9 +54,15 @@ public class Notes_Interface extends JFrame {
 	public Notes_Interface ( ) {
 		
 		JsonParser parser = new JsonParser();
+
+		//  Recovers previous data structure of notes.
+                if(!listOfNotes.isEmpty())
+                {
+                    listOfNotes = parser.retrieveNotesArray();
+                }
 		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setSize(400, 300);
+		this.setSize(500, 400);
 								
 		NotesCreationPanel = new JPanel();
 		
@@ -69,10 +80,11 @@ public class Notes_Interface extends JFrame {
 		
 		setCategoryBt = new JButton("Set Category");
 		
+		
 		setCategoryBt.addActionListener( e -> {
 			
-			String results = JOptionPane.showInputDialog(this, "Choose a category for this note.");
-			newNote.setCategory(results);
+			catResults = JOptionPane.showInputDialog(this, "Choose a category for this note.");
+			newNote.setCategory(catResults);
 			
 			
 		});
@@ -81,7 +93,7 @@ public class Notes_Interface extends JFrame {
 		
 		setTitleBt.addActionListener( e -> {
 			
-			String results = JOptionPane.showInputDialog(this, "Choose a title for this note.");
+			results = JOptionPane.showInputDialog(this, "Choose a title for this note.");
 			newNote.setTitle(results);
 			
 		});
@@ -89,16 +101,32 @@ public class Notes_Interface extends JFrame {
 		saveBt.addActionListener( e -> {
 			
 			newNote.setContent(notesArea.getText());
-									
-			listOfNotes.add(newNote.getID(), newNote);
-			
+							
+			//  Adds to the list.
+			Notes newNote = new Notes();
+                        newNote.setCategory(catResults);
+                        newNote.setTitle(results);
+			newNote.setContent(notesArea.getText());
+                        
+			listOfNotes.add(newNote);
 			parser.save(listOfNotes);
+			
+		});
+		
+
+		browseButton = new JButton("Browse");
+		
+		browseButton.addActionListener( e -> {
+			
+			browseScreen();
 			
 		});
 		
 		buttonsPanel.add(setTitleBt);
 		buttonsPanel.add(setCategoryBt);
 		buttonsPanel.add(saveBt);
+		buttonsPanel.add(browseButton);
+		
 		
 		NotesCreationPanel.add(buttonsPanel, BorderLayout.SOUTH);
 		NotesCreationPanel.add(notesArea, BorderLayout.CENTER);
@@ -120,16 +148,73 @@ public class Notes_Interface extends JFrame {
 	
 	}
 	
+	public void browseScreen () {
+		
+		JsonParser browserParser = new JsonParser();
+
+		this.remove(NotesCreationPanel);
+
+		JPanel browsePane = new JPanel();
+		
+		JScrollPane scrollBrowsePane = new JScrollPane(browsePane);
+		
+		browsePane.setLayout(new GridLayout(4, 4));
+		
+		int row = 0;
+		int col = 0;
+		Boolean alternateColor = true;
+		for (Notes note : browserParser.retrieveNotesArray()) {
+			
+			browsePane.add(new CustomNotesComponent("Title: " + note.getTitle(), "Content: " + note.getContent(), alternateColor), row, 0);
+			
+			System.out.print("[" + note.getContent() + "]");
+			alternateColor = !alternateColor;
+			
+			row++;
+		}
+		
+		this.add(scrollBrowsePane);
+		
+		//  Cleanly repaints the new screen.
+		this.repaint();
+		this.setVisible(true);
+		
+	}
+	
+	public class CustomNotesComponent extends JPanel {
+		
+		JLabel noteTitle;
+		JLabel noteContent;
+		
+		CustomNotesComponent(String newTitle, String newContent, Boolean alternate) {
+			
+			noteTitle = new JLabel(newTitle);
+			noteContent = new JLabel(newContent);
+			
+			this.setLayout(new GridLayout(2,2));
+			
+			this.add(noteContent, 1, 0);
+			this.add(noteTitle, 0, 0);
+
+			//  Alternates color of background.
+			if (alternate) {
+				this.setBackground(new Color(.5f, .7f, .75f));
+			} else {
+				this.setBackground(new Color(.5f, .5f, .7f));
+			}
+
+		}
+		
+	}
+	
 	public static void main (String [] args) {
 		
-		//SwingUtilities.invokeLater(()-> {
-
 			Notes_Interface notesScreen = new Notes_Interface();
 			
-			notesScreen.setVisible(true);
-			
+			notesScreen.setVisible(true);	
 		
 	}
 
 }
+
 
