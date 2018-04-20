@@ -3,7 +3,7 @@ package workstation;
  * Author: Curtis Warren and Anthony Davis
  * Description: This is a demo for the project SDEV Workstation (Modern Workstation)
  * to show how files should be saved in json form and how to work with the data for use in the program.
- * 
+ * Version 2.0
  */
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,10 +16,25 @@ import java.util.Scanner;
 
 public class JsonParser {
 	
-	ArrayList<Notes> notesArray = new ArrayList<Notes>();
+		ArrayList<Notes> notesArray = new ArrayList<Notes>();
         List<List<Notes>> noteHold = new ArrayList<List<Notes>>();
             
-	
+        public ArrayList<Notes> retrieveNotesArray () {
+    		
+    		File notesFile = new File("src/workstation/Notes.json");
+    		
+    		if (notesFile.exists()) {
+    			
+    			parse(notesFile);
+    			return notesArray;
+    			
+    		} else {
+    		
+    			return null;
+    		
+    		}
+    	}
+        
 	public void save (ArrayList<Notes> notesList) {
 		
 		FileWriter writer = null;
@@ -27,18 +42,27 @@ public class JsonParser {
 
 			File notesFile = new File("src/workstation/Notes.json");
 			writer = new FileWriter(notesFile);
-			// [ starts a list in JSON/JavaScript
+			int i = 0;
 			writer.write("[\n");
-			for (Notes note: notesList) {
-
-				//  The note.toString() is written in JavaScript object notation i.e.  { "Title":"Store Data Here", \n"Category":"Store Category"}
+			for (Notes note: notesList) 
+                        {//  The note.toString() is written in JavaScript object notation i.e.  { "Title":"Store Data Here", \n"Category":"Store Category"}
 				writer.write(note.toString());
-				if (note.equals(notesList.get(notesList.size() - 1))) {
-
+				i++;
+				if (note.equals(notesList.get(notesList.size() - 1))) 
+                                {
+                                    if(i == notesList.size())
+                                    {
+                                        writer.write("\n}");
+                                        break;
+                                    }
+                                    writer.write("\n},\n");
+                                    
 				} else {
-				writer.write(",\n");
+				writer.write("\n},");
 				}
-
+                                
+                                
+				
 			}
 			writer.write("\n]");
 
@@ -208,4 +232,5 @@ notesArray.add(note);
 	}
 
 }
+
 
