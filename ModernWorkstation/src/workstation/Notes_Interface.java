@@ -3,7 +3,7 @@ package workstation;
 /*
  * Author: Curtis Warren
  * Description: This is a working example of the notes saving feature.
- * Version 2.1
+ * Version 2.2
  */
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -25,6 +25,8 @@ import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
+import workstation.Notes_Interface.CustomNotesComponent;
+
 
 public class Notes_Interface extends JFrame {
 	
@@ -32,8 +34,8 @@ public class Notes_Interface extends JFrame {
 	private JButton saveBt;
 	private JButton setCategoryBt;
 	private JButton setTitleBt;
-        private String results;
-        private String catResults;
+    private String results;
+    private String catResults;
 	
 	Notes newNote = new Notes();
 	
@@ -54,7 +56,13 @@ public class Notes_Interface extends JFrame {
 	public Notes_Interface ( ) {
 		
 		JsonParser parser = new JsonParser();
-
+		//  If notes have been saved to Notes.json we preserve them.
+		if (parser.retrieveNotesArray() != null) {
+			
+			listOfNotes = parser.retrieveNotesArray();
+			
+		}
+		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setSize(500, 400);
 								
@@ -129,7 +137,9 @@ public class Notes_Interface extends JFrame {
 	public void createHomeScreen () {
 		
 	}
-	
+	public void editNotesScreen () {
+		
+	}
 	public void createNotesScreen () {
 		
 	}
@@ -153,13 +163,18 @@ public class Notes_Interface extends JFrame {
 		int row = 0;
 		int col = 0;
 		Boolean alternateColor = true;
-		for (Notes note : browserParser.retrieveNotesArray()) {
+		if (browserParser.retrieveNotesArray() == null) {
+			
+		} else {
+			for (Notes note : browserParser.retrieveNotesArray()) {
 			
 			browsePane.add(new CustomNotesComponent("Title: " + note.getTitle(), "Content: " + note.getContent(), alternateColor), row, 0);
 			
 			System.out.print("[" + note.getContent() + "]");
-			alternateColor = !alternateColor;			
+			
+			alternateColor = !alternateColor;
 			row++;
+			}
 		}
 		
 		this.add(scrollBrowsePane);
