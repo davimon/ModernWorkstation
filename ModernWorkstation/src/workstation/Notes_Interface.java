@@ -3,7 +3,7 @@ package workstation;
 /*
  * Author: Curtis Warren
  * Description: This is a working example of the notes saving feature.
- * Version 2.0
+ * Version 2.1
  */
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -32,6 +32,8 @@ public class Notes_Interface extends JFrame {
 	private JButton saveBt;
 	private JButton setCategoryBt;
 	private JButton setTitleBt;
+        private String results;
+        private String catResults;
 	
 	Notes newNote = new Notes();
 	
@@ -53,9 +55,6 @@ public class Notes_Interface extends JFrame {
 		
 		JsonParser parser = new JsonParser();
 
-		//  Recovers previous data structure of notes.
-		listOfNotes = parser.retrieveNotesArray();
-		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setSize(500, 400);
 								
@@ -78,8 +77,8 @@ public class Notes_Interface extends JFrame {
 		
 		setCategoryBt.addActionListener( e -> {
 			
-			String results = JOptionPane.showInputDialog(this, "Choose a category for this note.");
-			newNote.setCategory(results);
+			catResults = JOptionPane.showInputDialog(this, "Choose a category for this note.");
+			newNote.setCategory(catResults);
 			
 			
 		});
@@ -88,7 +87,7 @@ public class Notes_Interface extends JFrame {
 		
 		setTitleBt.addActionListener( e -> {
 			
-			String results = JOptionPane.showInputDialog(this, "Choose a title for this note.");
+			results = JOptionPane.showInputDialog(this, "Choose a title for this note.");
 			newNote.setTitle(results);
 			
 		});
@@ -159,8 +158,7 @@ public class Notes_Interface extends JFrame {
 			browsePane.add(new CustomNotesComponent("Title: " + note.getTitle(), "Content: " + note.getContent(), alternateColor), row, 0);
 			
 			System.out.print("[" + note.getContent() + "]");
-			alternateColor = !alternateColor;
-			
+			alternateColor = !alternateColor;			
 			row++;
 		}
 		
@@ -207,4 +205,5 @@ public class Notes_Interface extends JFrame {
 	}
 
 }
+
 
