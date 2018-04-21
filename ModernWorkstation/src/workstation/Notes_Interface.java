@@ -51,11 +51,12 @@ public class Notes_Interface extends JFrame {
 
 	private static Font notesFont;
 	private static File outputFile;
-	
+	private static int currentlyEditedNoteIndex;
 	private JButton browseButton;
 	
 	static {
 	
+		currentlyEditedNoteIndex= -1;
 		notesArea = new JTextArea();
 		notesFont = new Font("Arial", 20, 20);
 		
@@ -233,19 +234,25 @@ public class Notes_Interface extends JFrame {
 		editBt.addActionListener( e -> {
 			
 			newNote.setContent(notesArea.getText());
-							
-			//  Adds to the list.
-			listOfNotes.add(newNote);
+
+			if (currentlyEditedNoteIndex != -1) {
+				
+				listOfNotes.remove(currentlyEditedNoteIndex);
+				listOfNotes.add(currentlyEditedNoteIndex, newNote);
+
+				parser.save(listOfNotes);
+				
+				browsePane.removeAll();
+				
+				browsePane = resetBrowsePane(browsePane);
+				
+				browsePane.setVisible(false);
+				browsePane.repaint();
+				browsePane.setVisible(true);
+				
+				
+			}
 			
-			parser.save(listOfNotes);
-						
-			browsePane.removeAll();
-			
-			browsePane = resetBrowsePane(browsePane);
-			
-			browsePane.setVisible(false);
-			browsePane.repaint();
-			browsePane.setVisible(true);
 			
 		});
 		
@@ -264,7 +271,28 @@ public class Notes_Interface extends JFrame {
 
 		JPanel addNotePanel = new JPanel(new GridBagLayout());
 		
-		JButton addNoteBt = new JButton("Add Notes");
+		JButton addNoteBt = new JButton("Add Note");
+		addNoteBt.setFont(notesFont);
+		
+		addNoteBt.addActionListener( e -> {
+			
+			newNote.setContent(notesArea.getText());
+							
+			//  Adds to the list.
+			listOfNotes.add(newNote);
+			
+			parser.save(listOfNotes);
+						
+			browsePane.removeAll();
+			
+			browsePane = resetBrowsePane(browsePane);
+			
+			browsePane.setVisible(false);
+			browsePane.repaint();
+			browsePane.setVisible(true);
+			
+			
+		});
 
 		constraints.gridx = 1;
 		constraints.gridy = 1;
@@ -348,14 +376,48 @@ public class Notes_Interface extends JFrame {
 		if (brosweParser.retrieveNotesArray() == null) {
 			
 		} else {
-			for (Notes note : brosweParser.retrieveNotesArray()) {
 			
-				newBrowsePane.add(new CustomNotesComponent("Title: " + note.getTitle(), "Content: " + note.getContent(), alternateColor), row, 0);
+			listOfNotes = brosweParser.retrieveNotesArray();
 			
-			System.out.print("[" + note.getContent() + "]");
+			for (Notes note : listOfNotes) {
+				
+				String contentPreview;
+				
+				if (note.getContent().length() < 14) {
+					
+					contentPreview = note.getContent();
+					
+				} else {
+					
+					contentPreview = note.getContent().substring(0, 10) + "...";
+
+				}
+				
+				CustomNotesComponent customComponent = new CustomNotesComponent("Title: " + note.getTitle(), "Content: " + contentPreview, alternateColor);
+				
+				customComponent.setID(listOfNotes.indexOf(note));
+				
+				customComponent.edit.addActionListener(e -> {
+					
+					Notes editableNote = listOfNotes.get(customComponent.getID());
+					
+					currentlyEditedNoteIndex = customComponent.getID();
+					
+					notesArea.setText(editableNote.getContent());
+
+					//  Resets after data for newNote.
+					newNote.setContent("");
+					newNote.setCategory("");
+					newNote.setTitle("");
+					
+				});
+				
+				newBrowsePane.add(customComponent, row, 0);
 			
-			alternateColor = !alternateColor;
-			row++;
+				System.out.print("[" + note.getContent() + "]");
+			
+				alternateColor = !alternateColor;
+				row++;
 			}
 		}
 		
@@ -391,17 +453,54 @@ public class Notes_Interface extends JFrame {
 		
 		JLabel noteTitle;
 		JLabel noteContent;
+		JButton edit;
+		int ID;
 		
 		CustomNotesComponent(String newTitle, String newContent, Boolean alternate) {
 			
+			GridBagConstraints compConstraints = new GridBagConstraints();
+
+			Insets compInsets = new Insets(0,0,0,0);
+			
+			compConstraints.insets = compInsets;
+			
 			noteTitle = new JLabel(newTitle);
 			noteContent = new JLabel(newContent);
+			edit = new JButton ("edit");
 			
-			this.setLayout(new GridLayout(2,2));
+			this.setLayout(new GridBagLayout());
 			
-			this.add(noteContent, 1, 0);
-			this.add(noteTitle, 0, 0);
+			compConstraints.gridx = 0;
+			compConstraints.gridy = 0;
+			compConstraints.weightx = 1;
+			compConstraints.weighty = 1;
+			compConstraints.gridwidth = 3;
+			compConstraints.gridheight = 1;
+			compConstraints.fill = GridBagConstraints.HORIZONTAL;
 
+
+			this.add(noteTitle, compConstraints);
+
+			compConstraints.gridx = 0;
+			compConstraints.gridy = 1;
+			compConstraints.weightx = 1;
+			compConstraints.weighty = 1;
+			compConstraints.gridwidth = 2;
+			compConstraints.gridheight = 1;
+			compConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+			this.add(noteContent, compConstraints);
+			
+			compConstraints.gridx = 2;
+			compConstraints.gridy = 1;
+			compConstraints.weightx = .2;
+			compConstraints.weighty = .2;
+			compConstraints.gridwidth = 1;
+			compConstraints.gridheight = 1;
+			compConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+			this.add(edit, compConstraints);
+			
 			//  Alternates color of background.
 			if (alternate) {
 				this.setBackground(new Color(.5f, .7f, .75f));
@@ -409,6 +508,18 @@ public class Notes_Interface extends JFrame {
 				this.setBackground(new Color(.5f, .5f, .7f));
 			}
 
+		}
+		
+		void setID (int id) {
+			
+			this.ID =  id;
+			
+		}
+		
+		int getID () {
+			
+			return this.ID;
+			
 		}
 		
 	}
