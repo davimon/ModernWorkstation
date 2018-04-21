@@ -55,12 +55,6 @@ public class Notes_Interface extends JFrame {
 		
 		JsonParser parser = new JsonParser();
 
-		//  Recovers previous data structure of notes.
-                if(!listOfNotes.isEmpty())
-                {
-                    listOfNotes = parser.retrieveNotesArray();
-                }
-		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setSize(500, 400);
 								
@@ -103,12 +97,8 @@ public class Notes_Interface extends JFrame {
 			newNote.setContent(notesArea.getText());
 							
 			//  Adds to the list.
-			Notes newNote = new Notes();
-                        newNote.setCategory(catResults);
-                        newNote.setTitle(results);
-			newNote.setContent(notesArea.getText());
-                        
 			listOfNotes.add(newNote);
+			
 			parser.save(listOfNotes);
 			
 		});
@@ -168,8 +158,7 @@ public class Notes_Interface extends JFrame {
 			browsePane.add(new CustomNotesComponent("Title: " + note.getTitle(), "Content: " + note.getContent(), alternateColor), row, 0);
 			
 			System.out.print("[" + note.getContent() + "]");
-			alternateColor = !alternateColor;
-			
+			alternateColor = !alternateColor;			
 			row++;
 		}
 		

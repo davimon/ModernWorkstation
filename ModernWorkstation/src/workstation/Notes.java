@@ -3,9 +3,7 @@ package workstation;
  * Author: Curtis Warren,
  * Description: This is a demo for the project SDEV Workstation (Modern Workstation)
  * to show how files should be saved in json form and how to work with the data for use in the program.
- *
- *
- *
+ * Version 2.0
  */
 public class Notes {
 
@@ -72,14 +70,14 @@ public class Notes {
 public String toString() {
 
 	 if (this.category == null) {
-
-		 return "{\n\"Title\":\"" + this.title +"\",\n" + "\"Category\":\"\",\n" + "\"Content\":\"" + this.content + "\"\n}";
-
+		 
+		 return "{\n\"Title\":\"" + this.title +"\",\n" + "\"Category\":\"\",\n" + "\"Content\":\"" + this.content + "\"";  
+		 
 	 }
+	 
+	 return "{\n\"Title\":\"" + this.title +"\",\n" +  "\"Category\":\"" + this.category + "\",\n" + "\"Content\":\"" + this.content + "\"";  
 
-	 return "{\n\"Title\":\"" + this.title +"\",\n" +  "\"Category\":\"" + this.category + "\",\n" + "\"Content\":\"" + this.content + "\"\n}";
-
-
+	 
  }
 
 }

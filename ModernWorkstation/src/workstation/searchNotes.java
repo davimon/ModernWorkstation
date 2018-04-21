@@ -1,4 +1,4 @@
-package work_station;
+package workstation;
 
 import java.util.ArrayList;
 import java.util.List;

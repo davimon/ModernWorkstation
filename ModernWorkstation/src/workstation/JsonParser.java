@@ -58,7 +58,9 @@ public class JsonParser {
                                     writer.write("\n},\n");
                                     
 				} else {
-				writer.write("\n},");
+
+          writer.write("\n},");
+
 				}
                                 
                                 
