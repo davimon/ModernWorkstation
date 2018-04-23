@@ -4,7 +4,7 @@ package workstation;
  * Author: Curtis Warren
  * Description: This version has provided major changes to the application, the design has been changed to more accurately 
  * reflect the UI design first introduced.
- * Version 2.3
+ * Version 3.0
  */
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -233,9 +233,21 @@ public class Notes_Interface extends JFrame {
 
 		editBt.addActionListener( e -> {
 			
-			newNote.setContent(notesArea.getText());
-
 			if (currentlyEditedNoteIndex != -1) {
+				
+				newNote.setContent(notesArea.getText());
+
+				if (newNote.getTitle().equals("")) {
+					
+					newNote.setTitle(listOfNotes.get(currentlyEditedNoteIndex).getTitle());
+					
+				}
+				
+				if (newNote.getCategory().equals("") ) {
+					
+					newNote.setCategory(listOfNotes.get(currentlyEditedNoteIndex).getCategory());
+					
+				}
 				
 				listOfNotes.remove(currentlyEditedNoteIndex);
 				listOfNotes.add(currentlyEditedNoteIndex, newNote);
@@ -265,6 +277,29 @@ public class Notes_Interface extends JFrame {
 		
 		notesCreationPanel.add(deleteBt, constraints);
 		
+		deleteBt.addActionListener( e -> {
+			
+			if (currentlyEditedNoteIndex != -1) {
+				
+				listOfNotes.remove(currentlyEditedNoteIndex);
+				
+				parser.save(listOfNotes);
+				
+				browsePane.removeAll();
+				
+				browsePane = resetBrowsePane(browsePane);
+				
+				browsePane.setVisible(false);
+				browsePane.repaint();
+				browsePane.setVisible(true);
+				
+				currentlyEditedNoteIndex = -1;
+						
+			}
+			
+			
+		});
+		
 		/* End of notes creation section */
 		
 		/* Start of the add note section */
@@ -275,6 +310,9 @@ public class Notes_Interface extends JFrame {
 		addNoteBt.setFont(notesFont);
 		
 		addNoteBt.addActionListener( e -> {
+			
+			//  Prevents unintentional editing of notes.
+			currentlyEditedNoteIndex = -1;
 			
 			newNote.setContent(notesArea.getText());
 							
