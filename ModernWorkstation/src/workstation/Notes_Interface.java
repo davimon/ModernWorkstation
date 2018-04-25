@@ -44,25 +44,166 @@ public class Notes_Interface extends JFrame {
 	Notes newNote = new Notes();
 	
 	private static JTextArea notesArea;
-	//  The main panel for page one of the application.
+	//  The main panel for page two of the application.
+	private JPanel browsingNotesPanel;
 	private JPanel homePanel;
 	private JPanel notesCreationPanel;
 	private JPanel browsePane;
+	private JPanel remindersPanel ;
+	private JPanel recentNotesPanel ;
 
 	private static Font notesFont;
 	private static File outputFile;
 	private static int currentlyEditedNoteIndex;
 	private JButton browseButton;
+	private static Font labelFont;
+
 	
 	static {
 	
-		currentlyEditedNoteIndex= -1;
+		currentlyEditedNoteIndex = -1;
 		notesArea = new JTextArea();
 		notesFont = new Font("Arial", 20, 20);
+		labelFont = new Font("Arial", 15, 15);
 		
 	}
 	
 	public Notes_Interface ( ) {
+		
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setSize(800, 400);
+		this.setResizable(false);
+		
+		createHomeScreen();
+		
+		//createBrowsingNotesScreen();
+		
+	}
+	public JPanel populateRecentNotes(JPanel newRecentNotesPanel, int previewSize) {
+		
+		JsonParser recentParser = new JsonParser();
+
+		int row = 0;
+		int col = 0;
+		Boolean alternateColor = true;
+		if (recentParser.retrieveNotesArray() == null) {
+			
+		} else {
+			
+			listOfNotes = recentParser.retrieveNotesArray();
+			
+			for (Notes note : listOfNotes) {
+				
+				if (listOfNotes.size() - listOfNotes.indexOf(note) <= previewSize) {
+					String contentPreview;
+				
+					if (note.getContent().length() < 14) {
+					
+						contentPreview = note.getContent();
+					
+					} else {
+					
+						contentPreview = note.getContent().substring(0, 10) + "...";
+
+					}
+				
+					CustomNotesComponent customComponent = new CustomNotesComponent("Title: " + note.getTitle(), "Content: " + contentPreview, alternateColor);
+				
+					customComponent.setID(listOfNotes.indexOf(note));
+				
+					customComponent.edit.addActionListener(e -> {
+					
+						Notes editableNote = listOfNotes.get(customComponent.getID());
+					
+						currentlyEditedNoteIndex = customComponent.getID();
+					
+						createBrowsingNotesScreen();
+						
+						notesArea.setText(editableNote.getContent());
+
+						//  Resets after data for newNote.
+						newNote.setContent("");
+						newNote.setCategory("");
+						newNote.setTitle("");
+					
+					});
+				
+					newRecentNotesPanel.add(customComponent, row, 0);
+			
+					System.out.print("[" + note.getContent() + "]");
+			
+					alternateColor = !alternateColor;
+					row++;
+				}
+			}
+		}
+		
+		return newRecentNotesPanel;
+		
+	}
+	public JPanel resetBrowsePane(JPanel newBrowsePane) {
+		
+		JsonParser browseParser = new JsonParser();
+
+		int row = 0;
+		int col = 0;
+		Boolean alternateColor = true;
+		if (browseParser.retrieveNotesArray() == null) {
+			
+		} else {
+			
+			listOfNotes = browseParser.retrieveNotesArray();
+			
+			for (Notes note : listOfNotes) {
+				
+				String contentPreview;
+				
+				if (note.getContent().length() < 14) {
+					
+					contentPreview = note.getContent();
+					
+				} else {
+					
+					contentPreview = note.getContent().substring(0, 10) + "...";
+
+				}
+				
+				CustomNotesComponent customComponent = new CustomNotesComponent("Title: " + note.getTitle(), "Content: " + contentPreview, alternateColor);
+				
+				customComponent.setID(listOfNotes.indexOf(note));
+				
+				customComponent.edit.addActionListener(e -> {
+					
+					Notes editableNote = listOfNotes.get(customComponent.getID());
+					
+					currentlyEditedNoteIndex = customComponent.getID();
+					
+					notesArea.setText(editableNote.getContent());
+
+					//  Resets after data for newNote.
+					newNote.setContent("");
+					newNote.setCategory("");
+					newNote.setTitle("");
+					
+				});
+				
+				newBrowsePane.add(customComponent, row, 0);
+			
+				System.out.print("[" + note.getContent() + "]");
+			
+				alternateColor = !alternateColor;
+				row++;
+			}
+		}
+		
+		return newBrowsePane;
+		
+	}
+	public void createBrowsingNotesScreen () {
+		
+		if (homePanel != null) {
+			this.remove(homePanel);
+		}
 		
 		JsonParser parser = new JsonParser();
 		//  If notes have been saved to Notes.json we preserve them.
@@ -72,33 +213,56 @@ public class Notes_Interface extends JFrame {
 			
 		}
 		
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setSize(800, 400);
-							
-		/* Start of home and browse button section */
-		
-		JPanel homeBrowseBtPanel = new JPanel(new GridLayout(1, 2));
-		
-		JButton homeBt = new JButton("Home");
-		JButton brosweBt = new JButton("Browse");
-		
-
-		homeBrowseBtPanel.add(homeBt);
-		homeBrowseBtPanel.add(brosweBt);
-
-		/* End of home and browse button section*/
-		
-		/* Start  of the search section */
-		
 		GridBagConstraints constraints = new GridBagConstraints();
 
 		Insets insets = new Insets(0,0,0,0);
 		
 		constraints.insets = insets;
 		
+						
+		/* Start of home and browse button section */
+		
+		JPanel homeBrowseBtPanel = new JPanel(new GridBagLayout());
+		
+		JButton homeBt = new JButton("Home");
+		
+		homeBt.addActionListener( e -> {
+			
+			createHomeScreen();
+			
+		});
+		
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.gridwidth = 1;
+		constraints.gridheight = 1;
+		constraints.weightx = 1;
+		constraints.weighty = 1;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+
+		homeBrowseBtPanel.add(homeBt, constraints);
+		
+		JButton browseBt = new JButton("Browse");
+		
+		constraints.gridx = 1;
+		constraints.gridy = 0;
+		constraints.gridwidth = 1;
+		constraints.gridheight = 1;
+		constraints.weightx = 1;
+		constraints.weighty = 1;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+
+		homeBrowseBtPanel.add(browseBt, constraints);
+
+
+		/* End of home and browse button section*/
+		
+		/* Start  of the search section */
+		
 		JPanel searchPanel = new JPanel(new GridBagLayout());
 				
 		JLabel noteTitle =  new JLabel ("Notes");
+		noteTitle.setFont(labelFont);
 		
 		constraints.insets.right = 0;
 		constraints.insets.left = 0;
@@ -153,7 +317,7 @@ public class Notes_Interface extends JFrame {
 		browsePane = new JPanel();
 				
 		browsePane.setLayout(new GridLayout(0, 1));
-		
+		//  -1 means no cut off.
 		browsePane = resetBrowsePane(browsePane);
 		
 		JScrollPane scrollBrowsePane = new JScrollPane(browsePane);
@@ -345,7 +509,7 @@ public class Notes_Interface extends JFrame {
 		/* End of the add note section */
 
 		
-		homePanel = new JPanel (new GridBagLayout());
+		browsingNotesPanel = new JPanel (new GridBagLayout());
 		
 		constraints.insets = new Insets(0, 5, 0, 0);
 
@@ -358,14 +522,14 @@ public class Notes_Interface extends JFrame {
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 
 		
-		homePanel.add(homeBrowseBtPanel, constraints);
+		browsingNotesPanel.add(homeBrowseBtPanel, constraints);
 
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		constraints.gridwidth = 1;
 		constraints.gridheight = 1;
 		
-		homePanel.add(searchPanel, constraints);
+		browsingNotesPanel.add(searchPanel, constraints);
 		
 		constraints.gridx = 0;
 		constraints.gridy = 2;
@@ -374,7 +538,7 @@ public class Notes_Interface extends JFrame {
 		constraints.gridwidth = 1;
 		constraints.gridheight = 1;
 		
-		homePanel.add(scrollBrowsePane, constraints);
+		browsingNotesPanel.add(scrollBrowsePane, constraints);
 		
 		constraints.insets = new Insets(0, 20, 0, 0);
 		constraints.gridx = 1;
@@ -386,7 +550,7 @@ public class Notes_Interface extends JFrame {
 		constraints.fill = GridBagConstraints.BOTH;
 
 
-		homePanel.add(notesCreationPanel, constraints);
+		browsingNotesPanel.add(notesCreationPanel, constraints);
 		
 		constraints.gridx = 1;
 		constraints.gridy = 3;
@@ -397,73 +561,209 @@ public class Notes_Interface extends JFrame {
 		constraints.fill = GridBagConstraints.BOTH;
 
 
-		homePanel.add(addNotePanel, constraints);
+		browsingNotesPanel.add(addNotePanel, constraints);
 		
 
-		this.add(homePanel);
+		this.add(browsingNotesPanel);
 		
-	}
-	
-	public JPanel resetBrowsePane(JPanel newBrowsePane) {
-		
-		JsonParser brosweParser = new JsonParser();
+		this.repaint();
+		this.setVisible(true);
 
-		int row = 0;
-		int col = 0;
-		Boolean alternateColor = true;
-		if (brosweParser.retrieveNotesArray() == null) {
-			
-		} else {
-			
-			listOfNotes = brosweParser.retrieveNotesArray();
-			
-			for (Notes note : listOfNotes) {
-				
-				String contentPreview;
-				
-				if (note.getContent().length() < 14) {
-					
-					contentPreview = note.getContent();
-					
-				} else {
-					
-					contentPreview = note.getContent().substring(0, 10) + "...";
-
-				}
-				
-				CustomNotesComponent customComponent = new CustomNotesComponent("Title: " + note.getTitle(), "Content: " + contentPreview, alternateColor);
-				
-				customComponent.setID(listOfNotes.indexOf(note));
-				
-				customComponent.edit.addActionListener(e -> {
-					
-					Notes editableNote = listOfNotes.get(customComponent.getID());
-					
-					currentlyEditedNoteIndex = customComponent.getID();
-					
-					notesArea.setText(editableNote.getContent());
-
-					//  Resets after data for newNote.
-					newNote.setContent("");
-					newNote.setCategory("");
-					newNote.setTitle("");
-					
-				});
-				
-				newBrowsePane.add(customComponent, row, 0);
-			
-				System.out.print("[" + note.getContent() + "]");
-			
-				alternateColor = !alternateColor;
-				row++;
-			}
-		}
-		
-		return newBrowsePane;
-		
 	}
 	public void createHomeScreen () {
 		
+		if (browsingNotesPanel != null) {
+			this.remove(browsingNotesPanel);
+		}
+		
+		homePanel = new JPanel(new GridBagLayout());
+		
+		GridBagConstraints constraints = new GridBagConstraints();
+
+		Insets insets = new Insets(0,0,0,0);
+		
+		constraints.insets = insets;
+		
+		/* Start of home and browse button section */
+		
+		JPanel homeBrowseBtPanel = new JPanel(new GridBagLayout());
+		
+		JButton homeBt = new JButton("Home");
+		
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.gridwidth = 1;
+		constraints.gridheight = 1;
+		constraints.weightx = 1;
+		constraints.weighty = 1;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+
+		homeBrowseBtPanel.add(homeBt, constraints);
+		
+		JButton browseBt = new JButton("Browse");
+		
+		browseBt.addActionListener( e -> {
+			
+			createBrowsingNotesScreen();
+			
+		});
+		
+		constraints.gridx = 1;
+		constraints.gridy = 0;
+		constraints.gridwidth = 1;
+		constraints.gridheight = 1;
+		constraints.weightx = 1;
+		constraints.weighty = 1;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+
+		homeBrowseBtPanel.add(browseBt, constraints);
+
+
+		/* End of home and browse button section*/
+		
+		/* Start of recent notes section*/
+		
+		JPanel recentNotesSectionPanel = new JPanel(new GridBagLayout());
+
+		JLabel recentNotesLabel = new JLabel("Recent Notes");
+		recentNotesLabel.setFont(labelFont);
+		
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.gridwidth = 1;
+		constraints.gridheight = 1;
+		constraints.weightx = 1;
+		constraints.weighty = 1;
+		constraints.fill = GridBagConstraints.BOTH;
+
+		recentNotesSectionPanel.add(recentNotesLabel, constraints);
+		
+		recentNotesPanel = new JPanel(new GridLayout(0, 1));
+		
+		recentNotesPanel = populateRecentNotes(recentNotesPanel, 10);
+		
+		JScrollPane recentNotesScroll = new JScrollPane(recentNotesPanel);
+		recentNotesScroll.setPreferredSize(new Dimension(200, 200));
+
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		constraints.gridwidth = 1;
+		constraints.gridheight = 1;
+		constraints.weightx = 1;
+		constraints.weighty = 1;
+		constraints.fill = GridBagConstraints.BOTH;
+
+		recentNotesSectionPanel.add(recentNotesScroll, constraints);
+		
+
+		/* End of recent notes section*/
+
+		/* Start of reminders section*/
+		
+		JPanel remindersSectionPanel = new JPanel(new GridBagLayout());
+
+		JLabel remindersLabel = new JLabel("Reminders");
+		remindersLabel.setFont(labelFont);
+
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.gridwidth = 1;
+		constraints.gridheight = 1;
+		constraints.weightx = 1;
+		constraints.weighty = 1;
+		constraints.fill = GridBagConstraints.BOTH;
+
+		remindersSectionPanel.add(remindersLabel, constraints);
+		
+		remindersPanel = new JPanel(new GridLayout(0, 1));
+
+		JScrollPane remindersScroll = new JScrollPane(remindersPanel);
+		remindersScroll.setPreferredSize(new Dimension(100, 200));
+
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		constraints.gridwidth = 1;
+		constraints.gridheight = 1;
+		constraints.weightx = 1;
+		constraints.weighty = 1;
+		constraints.fill = GridBagConstraints.BOTH;
+
+		remindersSectionPanel.add(remindersScroll, constraints);
+		
+		
+		/* End of reminders section*/
+		
+		/* Start of the add note section */
+
+		JPanel addNotePanel = new JPanel(new GridBagLayout());
+		
+		JButton addNoteBt = new JButton("Add Note");
+		addNoteBt.setFont(notesFont);
+		
+		addNoteBt.addActionListener( e -> {
+			
+			createBrowsingNotesScreen();
+			
+		});
+
+		constraints.gridx = 1;
+		constraints.gridy = 1;
+		constraints.gridwidth = 2;
+		constraints.gridheight = 2;
+		constraints.fill = GridBagConstraints.BOTH;
+
+		addNotePanel.add(addNoteBt, constraints);
+
+		/* End of the add note section */
+
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.gridwidth = 1;
+		constraints.gridheight = 1;
+		constraints.weightx = 1;
+		constraints.weighty = 1;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+
+		homePanel.add(homeBrowseBtPanel, constraints);
+
+		constraints.insets = new Insets(5, 10, 10, 10);
+		
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		constraints.gridwidth = 1;
+		constraints.gridheight = 1;
+		constraints.weightx = 1;
+		constraints.weighty = 1;
+		constraints.fill = GridBagConstraints.BOTH;
+
+		homePanel.add(recentNotesSectionPanel, constraints);
+
+		constraints.gridx = 1;
+		constraints.gridy = 1;
+		constraints.gridwidth = 1;
+		constraints.gridheight = 1;
+		constraints.weightx = 1;
+		constraints.weighty = 1;
+		constraints.fill = GridBagConstraints.BOTH;
+
+		homePanel.add(remindersSectionPanel, constraints);
+		
+		constraints.gridx = 1;
+		constraints.gridy = 2;
+		constraints.gridwidth = 1;
+		constraints.gridheight = 1;
+		constraints.weightx = 1;
+		constraints.weighty = 1;
+		constraints.fill = GridBagConstraints.BOTH;
+
+		homePanel.add(addNotePanel, constraints);
+		
+		this.add(homePanel);
+		
+		this.repaint();
+		this.setVisible(true);
+		
+
 	}
 	public void editNotesScreen () {
 		
