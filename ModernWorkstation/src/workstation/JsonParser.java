@@ -142,7 +142,6 @@ public class JsonParser {
 						
 						//  Sets new category.
 						note.setCategory(dataLine.substring(startOfCategory, endOfCategory));
-						titleHolder = dataLine.substring(startOfTitle, endOfTitle);
 						System.out.println(dataLine.substring(startOfCategory, endOfCategory));
 						
 						dataLine = scanner.nextLine();
