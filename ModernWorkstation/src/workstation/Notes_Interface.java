@@ -2,9 +2,10 @@ package workstation;
 
 /*
  * Author: Curtis Warren
+ * Editor(s): Adam Levandowski (Functionality Tester) 
  * Description: This version has provided major changes to the application, the design has been changed to more accurately
  * reflect the UI design first introduced.
- * Version 3.0(f)
+ * Version 3.1.1
  */
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -125,11 +126,10 @@ public class Notes_Interface extends JFrame {
 
 						notesArea.setText(editableNote.getContent());
 
-                                                // Added methods to populate title and category fields
+                         // Added methods to populate title and category fields
+                         titleArea.setText(editableNote.getTitle());
 
-                                                titleArea.setText(editableNote.getTitle());
-
-                                                categoryArea.setText(editableNote.getCategory());
+                         categoryArea.setText(editableNote.getCategory());
 
 						//  Resets after data for newNote.
 						newNote.setContent("");
@@ -189,6 +189,11 @@ public class Notes_Interface extends JFrame {
 					currentlyEditedNoteIndex = customComponent.getID();
 
 					notesArea.setText(editableNote.getContent());
+
+					// Added methods to populate title and category fields
+                    titleArea.setText(editableNote.getTitle());
+
+                    categoryArea.setText(editableNote.getCategory());
 
 					//  Resets after data for newNote.
 					newNote.setContent("");
@@ -412,10 +417,10 @@ public class Notes_Interface extends JFrame {
 
 				newNote.setContent(notesArea.getText());
 
-        // added set methods for added title and category areas
-        newNote.setTitle(titleArea.getText());
+				// added set methods for added title and category areas
+				newNote.setTitle(titleArea.getText());
 
-      	newNote.setCategory(categoryArea.getText());
+				newNote.setCategory(categoryArea.getText());
 
 				//  Edits ArrayList
 				listOfNotes.remove(currentlyEditedNoteIndex);
