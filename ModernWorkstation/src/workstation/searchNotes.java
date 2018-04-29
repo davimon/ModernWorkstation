@@ -6,6 +6,7 @@ import java.util.List;
 
 public class searchNotes 
 {
+    //private List j;
     
     public List<Notes> searchKeyword(List<List<Notes>> sList, CharSequence cs)
     {
@@ -18,6 +19,7 @@ public class searchNotes
                     kHold.add(internalNote);
             }
         }
+        //setList(sList);
         return kHold;
     }
     
@@ -32,7 +34,10 @@ public class searchNotes
                     hold.add(internalNote);
             }
         }
+        //setList(sList);
         return hold;
     }
+    
+
     
 }
