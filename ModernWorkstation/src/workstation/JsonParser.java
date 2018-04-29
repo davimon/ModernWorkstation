@@ -16,7 +16,7 @@ import java.util.Scanner;
 
 public class JsonParser {
 
-		ArrayList<Notes> notesArray = new ArrayList<Notes>();
+	ArrayList<Notes> notesArray = new ArrayList<Notes>();
         List<List<Notes>> noteHold = new ArrayList<List<Notes>>();
 
         public ArrayList<Notes> retrieveNotesArray () {
@@ -185,18 +185,15 @@ public class JsonParser {
                     {
                       x++;
 	            }
-                   // setList(noteHold);
                     break;
                 } 
                 else if(noteHold.get(x).get(0).getTitle().equalsIgnoreCase(note.getTitle())) 
                 {
                     noteHold.get(x).add(note);
-                    //setList(noteHold);
                     break;
                 }
 
             }
-            //setList(noteHold);
 						}
 					}
 				}
@@ -224,11 +221,6 @@ public class JsonParser {
 		return "null";
 
 	}
-        public void setList(List<List<Notes>> newList) 
-    {
-
-	 noteHold = newList;
-    }
     
     public List<List<Notes>> getList() 
     {
