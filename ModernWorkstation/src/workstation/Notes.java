@@ -3,7 +3,7 @@ package workstation;
  * Author: Curtis Warren,
  * Description: This is a demo for the project SDEV Workstation (Modern Workstation)
  * to show how files should be saved in json form and how to work with the data for use in the program.
- * Version 2.0
+ * Version 2.2
  */
 public class Notes {
 
@@ -14,9 +14,9 @@ public class Notes {
 
  public Notes() {
 
-	 this.title = "Title";
-	 this.content = "Sample\nText.";
-     this.category = "Work";
+	 this.title = "";
+	 this.content = "";
+     this.category = "";
 
  }
 
