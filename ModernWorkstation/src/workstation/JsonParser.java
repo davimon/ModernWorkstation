@@ -16,7 +16,7 @@ import java.util.Scanner;
 
 public class JsonParser {
 
-		ArrayList<Notes> notesArray = new ArrayList<Notes>();
+	ArrayList<Notes> notesArray = new ArrayList<Notes>();
         List<List<Notes>> noteHold = new ArrayList<List<Notes>>();
 
         public ArrayList<Notes> retrieveNotesArray () {
@@ -59,7 +59,7 @@ public class JsonParser {
 
 				} else {
 
-          writer.write("\n},");
+          				writer.write("\n},");
 
 				}
 
@@ -89,7 +89,7 @@ public class JsonParser {
 
 	private String parse(File json) {
 
-    StringBuilder builder = new StringBuilder();
+    		StringBuilder builder = new StringBuilder();
 		StringBuilder contentBuilder = new StringBuilder();
 
 		Scanner scanner = null;
@@ -108,14 +108,14 @@ public class JsonParser {
 
 			scanner = new Scanner (dataString);
 			String dataLine = null;
-      String titleHolder = null;
+      			String titleHolder = null;
 
 			/*
 			 * Here we create notes and add them to the array list, this
 			 * array list will list out all of the notes to the user in a browse section of the gui.
 			 */
-      notesArray.clear();
-      noteHold.clear();
+      			notesArray.clear();
+      			noteHold.clear();
 			while(scanner.hasNextLine()){
 
 			    dataLine = scanner.nextLine();
