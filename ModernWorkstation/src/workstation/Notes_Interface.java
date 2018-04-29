@@ -39,15 +39,15 @@ public class Notes_Interface extends JFrame {
 	private JButton saveBt;
 	private JButton setCategoryBt;
 	private JButton setTitleBt;
-    private String results;
-    private String catResults;
+    	private String results;
+    	private String catResults;
 	Notes newNote = new Notes();
 
 	private static JTextArea notesArea;
-  private static JTextField titleArea;
-  private static JTextField categoryArea;
-  private static JLabel titleLabel;
-  private static JLabel categoryLabel;
+  	private static JTextField titleArea;
+  	private static JTextField categoryArea;
+  	private static JLabel titleLabel;
+  	private static JLabel categoryLabel;
 	//  The main panel for page two of the application.
 	private JPanel browsingNotesPanel;
 	private JPanel homePanel;
@@ -343,19 +343,19 @@ public class Notes_Interface extends JFrame {
                 * Added Title and Category labels and text fields *
                 *-------------------------------------------------*/
 
-    titleLabel =  new JLabel("Title");
+    		titleLabel =  new JLabel("Title");
 		titleLabel.setFont(labelFont);
 
-    categoryLabel =  new JLabel("Category");
+    		categoryLabel =  new JLabel("Category");
 		categoryLabel.setFont(labelFont);
 
-    titleArea = new JTextField(25);
+    		titleArea = new JTextField(25);
 		titleArea.setPreferredSize(new Dimension(20, 20));
 
-    categoryArea = new JTextField(25);
-    categoryArea.setPreferredSize(new Dimension(20, 20));
+    		categoryArea = new JTextField(25);
+    		categoryArea.setPreferredSize(new Dimension(20, 20));
 
-    constraints.gridx = 0;
+    		constraints.gridx = 0;
 		constraints.gridy = 0;
 		constraints.gridwidth = 4;
 		constraints.gridheight = 1;
@@ -365,17 +365,17 @@ public class Notes_Interface extends JFrame {
 
 		notesCreationPanel.add(titleLabel, constraints);
 
-    constraints.gridy = 1;
+    		constraints.gridy = 1;
 
-    notesCreationPanel.add(titleArea, constraints);
+    		notesCreationPanel.add(titleArea, constraints);
 
-    constraints.gridy = 2;
+    		constraints.gridy = 2;
 
-    notesCreationPanel.add(categoryLabel, constraints);
+    		notesCreationPanel.add(categoryLabel, constraints);
 
-    constraints.gridy = 3;
+    		constraints.gridy = 3;
 
-    notesCreationPanel.add(categoryArea, constraints);
+    		notesCreationPanel.add(categoryArea, constraints);
 
 		notesArea = new JTextArea(10, 10);
 		notesArea.setPreferredSize(new Dimension(10, 10));
